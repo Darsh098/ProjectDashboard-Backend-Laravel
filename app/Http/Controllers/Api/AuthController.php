@@ -30,7 +30,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function signup(Request $request)
+    public function register(Request $request)
     {
         try {
             $request->validate([
@@ -86,7 +86,7 @@ class AuthController extends Controller
         return $this->respond(1, 'Signup successful', ['token' => $token]);
     }
 
-    public function signin(Request $request)
+    public function login(Request $request)
     {
         try {
             $request->validate([

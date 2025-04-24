@@ -1,17 +1,26 @@
 <?php
 
-use App\Http\Middleware\CheckAuthorization;
+use App\Http\Controllers\Api\DashboardController;
+use App\Http\Middleware\Authentication;
 use App\Http\Middleware\EnsureTokenIsValid;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CustomerSourceController;
 use App\Http\Controllers\Api\AuthController;
 
-Route::post('signup', [AuthController::class, 'signup']);
-Route::post('signin', [AuthController::class, 'signin']);
-Route::post('verify', [AuthController::class, 'verify']);
+Route::prefix('authentication')->controller(AuthController::class)->group(function () {
+    Route::post('register', 'register');
+    Route::post('login', 'login');
+    Route::post('verify', 'verify');
+});
 
-Route::get('dashboard', fn() => response('<h1>Dashboard Success</h1>', 200))
-    ->middleware(CheckAuthorization::class);
+Route::middleware(Authentication::class)->controller(DashboardController::class)->group(function () {
+    Route::get('dashboard', 'index');
+    Route::get('profile', fn() => response('<h1>User Profile</h1>', 200));
+    Route::get('settings', fn() => response('<h1>User Settings</h1>', 200));
+});
+
+
+
 
 
 
